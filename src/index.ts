@@ -65,6 +65,9 @@ Cypress.Commands.add(
       method: 'POST',
       url: AzureTokenUrl,
       form: true, // we are submitting a regular form body
+      qs: {
+        redirectTo: 'http://localhost:3002',
+      },
       body: {
         grant_type: 'password', //read up on the other grant types, they are all useful, client_credentials and authorization_code
         client_id: configuration.auth.clientId, //obtained from the application section in AzureAD
