@@ -10,6 +10,7 @@ import {
 import {
   BrowserConfiguration,
   buildConfiguration,
+  Configuration,
 } from '@azure/msal-browser/dist/config/Configuration'
 import { CryptoOps } from '@azure/msal-browser/dist/crypto/CryptoOps'
 import { name, version } from '@azure/msal-browser/dist/packageMetadata'
@@ -41,19 +42,6 @@ export type OauthCredentials = {
   username: string
   password: string
   options?: unknown
-}
-
-const MsalConfig = {
-  auth: {
-    clientId: Cypress.env('REACT_APP_CLIENT_ID') || '',
-    authority: `https://login.microsoftonline.com/${Cypress.env(
-      'REACT_APP_TENANT_ID',
-    )}`,
-  },
-  cache: {
-    cacheLocation: BrowserCacheLocation.LocalStorage,
-    storeAuthStateInCookie: true,
-  },
 }
 
 export class OauthClient {
@@ -96,7 +84,7 @@ export class OauthClient {
    *
    * @param configuration Object for the MSAL PublicClientApplication instance
    */
-  constructor() {
+  constructor(configuration: Configuration) {
     /*
      * If loaded in an environment where window is not available,
      * set internal flag to false so that further requests fail.
@@ -104,7 +92,7 @@ export class OauthClient {
      */
     this.isBrowserEnvironment = typeof window !== 'undefined'
     // Set the configuration.
-    this.config = buildConfiguration(MsalConfig, this.isBrowserEnvironment)
+    this.config = buildConfiguration(configuration, this.isBrowserEnvironment)
 
     // Initialize logger
     this.logger = new Logger(this.config.system.loggerOptions, name, version)

@@ -9,6 +9,7 @@
   "scripts": {
     "build": "install-peers -f && tsc",
     "build:watch": "yarn build --watch",
+    "clean": "rm -rf node_modules/cypress node_modules/@azure/msal-browser",
     "prepare": "install-peers",
     "patch": "npm version patch",
     "test": "test"
@@ -32,8 +33,7 @@
   "dependencies": {},
   "peerDependencies": {
     "@azure/msal-browser": ">=2",
-    "cypress": ">=7",
-    "react": ">=16.8"
+    "cypress": ">=7"
   },
   "devDependencies": {
     "install-peers-cli": "^2.2.0",
