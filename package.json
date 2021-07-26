@@ -10,6 +10,7 @@
     "build": "install-peers -f && tsc",
     "build:watch": "yarn build --watch",
     "prepare": "install-peers",
+    "patch": "npm version patch",
     "test": "test"
   },
   "repository": {

@@ -30,8 +30,17 @@ export const AzureTokenUrl = `https://login.microsoftonline.com/${Cypress.env(
   'REACT_APP_TENANT_ID',
 )}/oauth2/v2.0/token`
 
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      msalCreateAccessToken(credentials: OauthCredentials): Chainable<any>;
+      msalLogin(authResponse: unknown): Chainable<any>;
+    }
+  }
+}
+
 Cypress.Commands.add(
-  'authCreateAccessToken',
+  'msalCreateAccessToken',
   function (loginParams: OauthCredentials) {
     // const loginClient = new UsernamePasswordClientApplication()
     // return loginClient.acquireTokenByUsernamePassword(credentials)
@@ -80,7 +89,7 @@ const setToken = (authResponse: ServerAuthorizationTokenResponse) =>
   new Cypress.Promise((resolve, reject) => {
     oauthClient.setToken(authResponse).then(resolve).catch(reject)
   })
-Cypress.Commands.add('authLogin', function (response: unknown) {
+Cypress.Commands.add('msalLogin', function (response: unknown) {
   const authResponse = response as ServerAuthorizationTokenResponse
 
   cy.intercept('POST', AzureTokenUrl, (req) => {
