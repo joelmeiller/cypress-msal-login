@@ -1,6 +1,6 @@
 {
   "name": "cypress-msal-login",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Cypress command extension to log into a SSO App through the Microsoft Authentication flow using the MSAL library in the app.",
   "main": "lib/index.js",
   "files": [
