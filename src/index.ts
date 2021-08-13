@@ -81,7 +81,7 @@ Cypress.Commands.add(
     cy.request(options).then((res) => {
       expect(res.status).to.eq(200)
       const tokenResponse = res.body as ServerAuthorizationTokenResponse
-
+      cy.wrap(tokenResponse.access_token).as('sessionToken')
       cy.wrap(null).then(async () => {
         await setToken(tokenResponse)
         cy.reload()

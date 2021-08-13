@@ -11,7 +11,7 @@
     "build:watch": "yarn build --watch",
     "clean": "rm -rf node_modules/cypress node_modules/@azure/msal-browser",
     "prepare": "install-peers",
-    "patch": "npm version patch",
+    "patch": "git add -A && git commit -m 'patch' && npm version patch",
     "test": "test"
   },
   "repository": {
