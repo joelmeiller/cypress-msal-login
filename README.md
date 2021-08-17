@@ -59,12 +59,19 @@ const msalConfig: Configuration = {
 }
 ```
 
-- Scope
-The scope of the token. Make sure you include at least the `openid`, `profile`, `user` and `offline_access` 
+## Session token
 
+The session token (access_token) is exposes as alias **sessionToken** and you can get it like this:
+```
+  cy.get('@sessionToken').then(sessionToken => {
+    // ... do whatever you want with it.
+  })
+```
 
 
 
 
 ## Trouble-shoot
 
+- Scope
+The scope of the token. Make sure you include at least the `openid`, `profile`, `user` and `offline_access` 
