@@ -112,7 +112,7 @@ export class OauthClient {
     }
 
     // Initialize the crypto class.
-    this.browserCrypto = new CryptoOps()
+    this.browserCrypto = new CryptoOps(this.logger)
 
     // Initialize the browser storage class.
     this.browserStorage = new BrowserCacheManager(
