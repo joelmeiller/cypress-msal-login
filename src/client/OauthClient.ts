@@ -185,6 +185,7 @@ export class OauthClient {
         this.config.system.networkClient,
         this.browserStorage,
         authorityOptions,
+        this.logger,
       )
     }
 
@@ -197,6 +198,7 @@ export class OauthClient {
       this.config.system.networkClient,
       this.browserStorage,
       authorityOptions,
+      this.logger
     )
   }
 
