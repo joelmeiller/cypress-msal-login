@@ -23,7 +23,7 @@ The login command requires three parameters. Here is a minimal example:
 ```
 cy.msalLogin(
   {
-    email: 'my-test-user@cypress.com',
+    username: 'my-test-user@cypress.com',
     password: 'whatever'
   },
   {
