@@ -83,7 +83,9 @@ Cypress.Commands.add(
       const tokenResponse = res.body as ServerAuthorizationTokenResponse
       cy.wrap(tokenResponse.access_token).as('sessionToken')
 
-      cy.wrap(async () => await setToken(tokenResponse))
+      const setTokenPromise = async () => await setToken(tokenResponse)
+      cy.wrap(setTokenPromise())
+
       cy.reload()
     })
   },

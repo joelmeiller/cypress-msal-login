@@ -33,7 +33,7 @@
   "dependencies": {},
   "peerDependencies": {
     "@azure/msal-browser": ">=2",
-    "cypress": ">=7"
+    "cypress": ">=10"
   },
   "devDependencies": {
     "install-peers-cli": "^2.2.0",
