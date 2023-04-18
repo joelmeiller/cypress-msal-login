@@ -78,14 +78,16 @@ Cypress.Commands.add(
     // allow us to override defaults with passed in overrides
     Cypress._.extend(options, loginParams.options)
 
-    cy.request(options).then((res) => {
-      expect(res.status).to.eq(200)
-      const tokenResponse = res.body as ServerAuthorizationTokenResponse
-      cy.wrap(tokenResponse.access_token).as('sessionToken')
-      cy.wrap(null).then(async () => {
+    cy.request(options)
+      .then((res) => {
+        expect(res.status).to.eq(200)
+        const tokenResponse = res.body as ServerAuthorizationTokenResponse
+        cy.wrap(tokenResponse.access_token).as('sessionToken')
+        return tokenResponse
+      })
+      .then(async (tokenResponse) => {
         await setToken(tokenResponse)
         cy.reload()
       })
-    })
   },
 )
