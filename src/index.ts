@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+/// <reference types="cypress/types" />
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -28,6 +28,14 @@
 import { Configuration } from '@azure/msal-browser'
 import { ServerAuthorizationTokenResponse } from '@azure/msal-common/dist/response/ServerAuthorizationTokenResponse'
 import { OauthClient, OauthCredentials } from './client/OauthClient'
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      msalLogin(loginParams: OauthCredentials, configuration: Configuration, scopes: Array<string>): any
+    }
+  }
+}
 
 Cypress.Commands.add(
   'msalLogin',

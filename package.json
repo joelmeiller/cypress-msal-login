@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "install-peers -f && tsc",
-    "build:esbuild": "esbuild --bundle --platform=node --target=node14 --outfile=lib/index.js src/index.ts --external:@azure/msal-browser --external:@azure/msal-common --external:cypress",
+    "build:esbuild": "esbuild --bundle --platform=node --outfile=lib/index.js src/index.ts --external:@azure/msal-browser --external:@azure/msal-common --external:cypress",
     "build:clean": "tsc",
     "build:watch": "yarn build --watch",
     "clean": "rm -rf node_modules/cypress node_modules/@azure/msal-browser",
