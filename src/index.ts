@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -26,18 +28,6 @@
 import { Configuration } from '@azure/msal-browser'
 import { ServerAuthorizationTokenResponse } from '@azure/msal-common/dist/response/ServerAuthorizationTokenResponse'
 import { OauthClient, OauthCredentials } from './client/OauthClient'
-
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      msalLogin(
-        loginParams: OauthCredentials,
-        configuration: Configuration,
-        scopes: Array<string>,
-      ): Chainable<any>
-    }
-  }
-}
 
 Cypress.Commands.add(
   'msalLogin',

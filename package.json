@@ -3,11 +3,14 @@
   "version": "1.1.1",
   "description": "Cypress command extension to log into a SSO App through the Microsoft Authentication flow using the MSAL library in the app.",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
   "scripts": {
     "build": "install-peers -f && tsc",
+    "build:esbuild": "esbuild --bundle --platform=node --target=node14 --outfile=lib/index.js src/index.ts --external:@azure/msal-browser --external:@azure/msal-common --external:cypress",
+    "build:clean": "tsc",
     "build:watch": "yarn build --watch",
     "clean": "rm -rf node_modules/cypress node_modules/@azure/msal-browser",
     "prepare": "install-peers",
@@ -32,12 +35,14 @@
   "homepage": "https://github.com/joelmeiller/cypress-msal-login#readme",
   "dependencies": {},
   "peerDependencies": {
-    "@azure/msal-browser": ">=2",
+    "@azure/msal-browser": ">=3",
     "cypress": ">=10"
   },
   "devDependencies": {
+    "cypress": ">=10",
+    "esbuild": "^0.19.3",
     "install-peers-cli": "^2.2.0",
-    "prettier": "^2.3.2",
-    "typescript": "^4.3.5"
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
   }
 }
