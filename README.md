@@ -1,13 +1,23 @@
 # cypress-msal-login
 Cypress command extension to log into a SSO App through the Microsoft Authentication flow using the MSAL library in the app.
 
-## Installation
+## Installation V1 for MSAL library <= 2
 
 This package depends on the MSAL browser library to be installed in your application (peerDependency)
 
 ```bash
 npm install @azure/msal-browser
 ```
+
+Add the cypress package as a dev dependency
+
+```bash
+npm install --dev cypress-msal-login
+```
+
+## Installation V2 for MSAL library = 3
+
+This package nomore depends on the MSAL browser library and can be added directly
 
 Add the cypress package as a dev dependency
 
