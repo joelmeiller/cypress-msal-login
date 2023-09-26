@@ -25,8 +25,7 @@ Add the cypress package as a dev dependency
 npm install --dev cypress-msal-login
 ```
 
-
-## Login with MSAL account
+## Login with MSAL account
 
 The login command requires three parameters. Here is a minimal example:
 
