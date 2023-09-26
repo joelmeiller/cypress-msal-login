@@ -2,19 +2,18 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
-import { AuthenticationResult } from '@azure/msal-browser'
 import {
-  BrowserCacheManager,
-  DEFAULT_BROWSER_CACHE_MANAGER,
-} from '@azure/msal-browser/dist/cache/BrowserCacheManager'
-import {
+  AuthenticationResult,
   BrowserConfiguration,
-  buildConfiguration,
   Configuration,
+} from '@azure/msal-browser'
+import { TestCacheManager, DEFAULT_TEST_CACHE_MANAGER } from './azure/TestCacheManager'
+import {
+  // BrowserConfiguration,
+  buildConfiguration,
+  // Configuration,
 } from '@azure/msal-browser/dist/config/Configuration'
 import { CryptoOps } from '@azure/msal-browser/dist/crypto/CryptoOps'
-import { name, version } from '@azure/msal-browser/dist/packageMetadata'
-import { BrowserCacheLocation } from '@azure/msal-browser/dist/utils/BrowserConstants'
 import {
   AuthenticationScheme,
   Authority,
@@ -25,12 +24,15 @@ import {
   ICrypto,
   INetworkModule,
   Logger,
+  ResponseHandler,
+  ServerAuthorizationTokenResponse,
   ServerTelemetryManager,
   ServerTelemetryRequest,
   TimeUtils,
+  CacheManager,
 } from '@azure/msal-common'
-import { ResponseHandler } from '@azure/msal-common/dist/response/ResponseHandler'
-import { ServerAuthorizationTokenResponse } from '@azure/msal-common/dist/response/ServerAuthorizationTokenResponse'
+// import { ResponseHandler } from '@azure/msal-common/dist/response/ResponseHandler.mjs'
+// import type { ServerAuthorizationTokenResponse } from '@azure/msal-common/dist/response/ServerAuthorizationTokenResponse'
 
 export type OauthTokenResponse = {
   access_token: string
@@ -45,11 +47,14 @@ export type OauthCredentials = {
 }
 
 export class OauthClient {
+  public readonly name: string = 'cypress-msal-login'
+  public readonly version: string = '2.0.0'
+
   // Crypto interface implementation
   protected readonly browserCrypto: ICrypto
 
   // Storage interface implementation
-  protected readonly browserStorage: BrowserCacheManager
+  protected readonly browserStorage: CacheManager
 
   // Network interface implementation
   protected readonly networkClient: INetworkModule
@@ -95,7 +100,7 @@ export class OauthClient {
     this.config = buildConfiguration(configuration, this.isBrowserEnvironment)
 
     // Initialize logger
-    this.logger = new Logger(this.config.system.loggerOptions, name, version)
+    this.logger = new Logger(this.config.system.loggerOptions, this.name, this.version)
 
     // Initialize the network module class.
     this.networkClient = this.config.system.networkClient
@@ -103,10 +108,7 @@ export class OauthClient {
     // Initialize redirectResponse Map
 
     if (!this.isBrowserEnvironment) {
-      this.browserStorage = DEFAULT_BROWSER_CACHE_MANAGER(
-        this.config.auth.clientId,
-        this.logger,
-      )
+      this.browserStorage = DEFAULT_TEST_CACHE_MANAGER(this.config.auth.clientId, this.logger)
       this.browserCrypto = DEFAULT_CRYPTO_IMPLEMENTATION
       return
     }
@@ -115,7 +117,7 @@ export class OauthClient {
     this.browserCrypto = new CryptoOps(this.logger)
 
     // Initialize the browser storage class.
-    this.browserStorage = new BrowserCacheManager(
+    this.browserStorage = new TestCacheManager(
       this.config.auth.clientId,
       this.config.cache,
       this.browserCrypto,
@@ -154,7 +156,7 @@ export class OauthClient {
   }
 
   async setToken(response: ServerAuthorizationTokenResponse) {
-    const baseRequest = this.initializeBaseRequest()    
+    const baseRequest = this.initializeBaseRequest()
     return await this.handleToken(baseRequest, response)
   }
 
@@ -176,10 +178,7 @@ export class OauthClient {
     }
 
     if (requestAuthority) {
-      this.logger.verbose(
-        'Creating discovered authority with request authority',
-        requestCorrelationId,
-      )
+      this.logger.verbose('Creating discovered authority with request authority', requestCorrelationId)
       return await AuthorityFactory.createDiscoveredInstance(
         requestAuthority,
         this.config.system.networkClient,
@@ -189,16 +188,13 @@ export class OauthClient {
       )
     }
 
-    this.logger.verbose(
-      'Creating discovered authority with configured authority',
-      requestCorrelationId,
-    )
+    this.logger.verbose('Creating discovered authority with configured authority', requestCorrelationId)
     return await AuthorityFactory.createDiscoveredInstance(
       this.config.auth.authority,
       this.config.system.networkClient,
       this.browserStorage,
       authorityOptions,
-      this.logger
+      this.logger,
     )
   }
 
@@ -233,10 +229,7 @@ export class OauthClient {
     correlationId: string,
     forceRefresh?: boolean,
   ): ServerTelemetryManager {
-    this.logger.verbose(
-      'initializeServerTelemetryManager called',
-      correlationId,
-    )
+    this.logger.verbose('initializeServerTelemetryManager called', correlationId)
     const telemetryPayload: ServerTelemetryRequest = {
       clientId: this.config.auth.clientId,
       correlationId: correlationId,

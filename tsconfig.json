@@ -19,7 +19,7 @@
     "skipLibCheck": false,
     "sourceMap": true,
     "target": "es5",
-    "typeRoots": ["node_modules/@types", "node_modules/cypress/types", "src/index.d.ts"]
+    "typeRoots": ["node_modules/@types/node", "node_modules/@azure", "node_modules/cypress/types", "src"]
   },
   "include": ["src"],
   "exclude": ["lib"]
