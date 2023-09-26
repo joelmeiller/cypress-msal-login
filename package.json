@@ -1,15 +1,23 @@
 {
   "name": "cypress-msal-login",
-  "version": "1.1.1",
+  "version": "2.0.1",
   "description": "Cypress command extension to log into a SSO App through the Microsoft Authentication flow using the MSAL library in the app.",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
   "scripts": {
-    "build": "install-peers -f && tsc",
+    "lib:clean": "rm -rf lib",
+    "msal:clean": "rm -rf src/client/azure/msal-browser src/client/azure/msal-common",
+    "msal:copy": "yarn msal:clean && cp -r node_modules/@azure/msal-browser/src src/client/azure/msal-browser && cp -r node_modules/@azure/msal-common/src src/client/azure/msal-common",
+    "msal:replace": "node azure.install.mjs",
+    "build": "install-peers -f && yarn msal:copy && tsc",
+    "build:esbuild": "yarn lib:clean && yarn msal:copy && yarn msal:replace && node esbuild.mjs",
+    "build:types": "tsc",
+    "build:tsc": "tsc",
     "build:watch": "yarn build --watch",
-    "clean": "rm -rf node_modules/cypress node_modules/@azure/msal-browser",
+    "clean": "rm -rf node_modules/cypress node_modules/@azure",
     "prepare": "install-peers",
     "patch": "git add -A && git commit -m 'patch' && npm version patch",
     "test": "test"
@@ -32,12 +40,15 @@
   "homepage": "https://github.com/joelmeiller/cypress-msal-login#readme",
   "dependencies": {},
   "peerDependencies": {
-    "@azure/msal-browser": ">=2",
-    "cypress": ">=10"
+    "cypress": ">=12"
   },
   "devDependencies": {
+    "@azure/msal-browser": ">=3",
+    "esbuild": "^0.19.3",
+    "esbuild-plugin-replace": "^1.4.0",
     "install-peers-cli": "^2.2.0",
-    "prettier": "^2.3.2",
-    "typescript": "^4.3.5"
+    "prettier": "^3.0.3",
+    "replace-in-file": "^7.0.1",
+    "typescript": "^5.2.2"
   }
 }
