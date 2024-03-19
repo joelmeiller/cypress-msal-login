@@ -41,8 +41,24 @@ Cypress.Commands.add(
   'msalLogin',
   function (loginParams: OauthCredentials, configuration: Configuration, scopes: Array<string>) {
     Cypress.log({
-      name: 'msal SSO login ',
-    })
+      name: "msal SSO login",
+      message: JSON.stringify({
+        loginParams: {
+          username: loginParams.username, password: loginParams.password?.substring(0, 4),
+        },
+        configuration: configuration,
+        scopes: scopes,
+      }),
+      consoleProps: () => {
+        return {
+          loginParams: {
+            username: loginParams.username, password: loginParams.password?.substring(0, 4),
+          },
+          configuration: configuration,
+          scopes: scopes,
+        }
+      }
+    });
 
     const AzureTokenUrl = `${configuration.auth.authority}/oauth2/v2.0/token`
     const oauthClient = new OauthClient(configuration)
